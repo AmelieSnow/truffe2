@@ -8,7 +8,7 @@ requests
 django-impersonate<1
 pytz
 git+https://github.com/goinnn/django-multiselectfield
-easy_thumbnails<=2.5
+easy_thumbnails<2.5
 bleach<1.5
 python-ldap
 pisa
@@ -18,7 +18,7 @@ django-jfu
 django-sendfile
 django-haystack==2.4.1
 whoosh
-pdfminer
+pdfminer.six
 textract
 celery-haystack
 celery==3.1.25
