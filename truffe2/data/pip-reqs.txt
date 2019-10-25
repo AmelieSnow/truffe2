@@ -21,7 +21,7 @@ whoosh
 pdfminer
 textract
 celery-haystack
-celery
+celery==3.1.25
 pypdf
 wand
 schwifty
