@@ -20,8 +20,8 @@ django-haystack==2.4.1
 whoosh
 pdfminer.six
 textract
-celery-haystack
 celery==3.1.25
+celery-haystack<0.10
 pypdf
 wand
 schwifty
