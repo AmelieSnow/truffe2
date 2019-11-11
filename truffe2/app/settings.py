@@ -3,6 +3,8 @@
 # Django settings for truffe2 project.
 
 from django.utils.translation import ugettext_lazy as _
+import os
+import yaml
 
 from os.path import abspath, dirname, join, normpath
 DJANGO_ROOT = dirname(abspath(__file__)) + '/../'
@@ -274,12 +276,25 @@ WEBSITE_PATH = 'https://truffe2.agepoly.ch'
 
 EMAIL_FROM = 'truffe2@epfl.ch'
 
-try:
-    from settingsLocal import *
-except ImportError:
-    raise
+with open(dirname(abspath(__file__)) + "/settingsLocal.yaml", 'r') as stream:
+    cfg = yaml.safe_load(stream)
 
-if ACTIVATE_RAVEN:
-    INSTALLED_APPS = INSTALLED_APPS + (
-        'raven.contrib.django.raven_compat',
-    )
+hosts = []  # type: List[str]
+
+hosts_from_env = os.environ.get("HOST", "")
+if hosts_from_env:
+    hosts = hosts_from_env.split(":")
+else:
+    hosts = cfg["ALLOWED_HOSTS"]
+
+if not hosts:
+    raise Exception("Could not deternime Application Host.")
+
+ACTIVATE_RAVEN = False
+
+DEBUG = cfg["DEBUG"]
+DATABASES = cfg["DATABASES"]
+
+ALLOWED_HOSTS = hosts
+
+SECRET_KEY = cfg["SECRET_KEY"]
