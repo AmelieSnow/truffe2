@@ -7,6 +7,15 @@ from django.utils.safestring import mark_safe
 from django.utils.timezone import localtime
 from django.core.urlresolvers import reverse
 
+import ho.pisa as pisa
+import cStringIO as StringIO
+from django.utils.text import slugify
+from django.template.loader import get_template
+from django.template import Context
+from django.conf import settings
+from django.utils.timezone import now
+from django.shortcuts import render
+import os
 
 from rights.utils import UnitEditableModel, UnitExternalEditableModel
 from datetime import timedelta
@@ -464,6 +473,32 @@ class _SupplyReservation(GenericModel, GenericModelWithLines, GenericDelayValida
             'remarks': lambda (obj, user): obj.status == '2_online' and obj.rights_can('VALIDATE', user),
             'lines': lambda (obj, user): obj.status == '0_draft',
         }
+
+    def switch_status_signal(self, request, old_status, dest_status):
+        s = super(_SupplyReservation, self)
+
+        if hasattr(s, 'switch_status_signal'):
+            s.switch_status_signal(request, old_status, dest_status)
+
+        if dest_status == '2_online':
+            template = get_template("logistics/supplyreservation/pdf.html")
+            context = Context({'MEDIA_ROOT': settings.MEDIA_ROOT, 'cdate': now(), 'user': request.user, 'supplyreservation': self})
+
+
+            html = template.render(context)
+	    
+            folder = "logistic_export_auto"
+
+            try:
+        	os.mkdir(os.path.join(settings.MEDIA_ROOT, folder))
+    	    except:
+	        pass
+
+            full_filename = os.path.join(settings.MEDIA_ROOT, folder, slugify(u'RES-'+self.title+u'-'+str(self.id))+u'.pdf')
+
+            result = open(full_filename, 'wb') # Changed from file to filename
+            pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")), result)
+            result.close()
 
     class MetaSearch(SearchableModel.MetaSearch):
 
