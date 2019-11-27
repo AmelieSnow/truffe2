@@ -500,12 +500,6 @@ class _SupplyReservation(GenericModel, GenericModelWithLines, GenericDelayValida
             pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")), result)
             result.close()
 
-	    
-	    try:
-        	os.system(u'rclone copy '+full_filename+u' GoogleDriveLog:/')
-    	    except:
-	        pass
-
     class MetaSearch(SearchableModel.MetaSearch):
 
         extra_text = u""
