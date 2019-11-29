@@ -1,0 +1,27 @@
+DATABASES:
+    default:
+      # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+      ENGINE: django.db.backends.mysql
+      # Name or path to database file if using sqlite3.
+      NAME: truffe2_public_test_db
+      # The following settings are not used with sqlite3
+      USER: truffe2_public_test_db
+      # Empty for localhost through domain sockets
+      PASSWORD: notasecret
+      # or '127.0.0.1' for localhost through TCP.
+      HOST: databases
+      # Set to empty string for default.
+      PORT: ''
+
+BROKER_URL: "ampq://guest@localhost:5762"
+
+# Make this unique, and don't share it with anybody.
+SECRET_KEY: NOT_A_SECRET
+
+EMAIL_HOST: mail.epfl.ch
+EMAIL_PORT: 25
+
+ALLOWED_HOSTS:
+    - truffe2.agepoly.ch
+
+DEBUG: False
