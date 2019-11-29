@@ -276,7 +276,7 @@ WEBSITE_PATH = 'https://truffe2.agepoly.ch'
 
 EMAIL_FROM = 'truffe2@epfl.ch'
 
-with open(dirname(abspath(__file__)) + "/settingsLocal.yaml", 'r') as stream:
+with open(dirname(abspath(__file__)) + "/../config.yaml", 'r') as stream:
     cfg = yaml.safe_load(stream)
 
 hosts = []  # type: List[str]
