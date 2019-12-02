@@ -276,7 +276,10 @@ WEBSITE_PATH = 'https://truffe2.agepoly.ch'
 
 EMAIL_FROM = 'truffe2@epfl.ch'
 
-with open(dirname(abspath(__file__)) + "/../config.yaml", 'r') as stream:
+app_config = os.environ.get("APP_CONFIG", dirname(abspath(__file__)) + "/../config.yaml")
+    
+with open(app_config, 'r') as stream:
+
     cfg = yaml.safe_load(stream)
 
 hosts = []  # type: List[str]
