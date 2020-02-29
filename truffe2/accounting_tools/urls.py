@@ -23,4 +23,8 @@ urlpatterns = patterns(
     url(r'^internaltransfer/(?P<pk>[0-9,]+)/csv/', 'internaltransfer_csv'),
     url(r'^expenseclaim/(?P<pk>[0-9,]+)/csv/', 'expenseclaim_csv'),
     url(r'^cashbook/(?P<pk>[0-9,]+)/csv/', 'cashbook_csv'),
+
+    url(r'^financialprovider/list/', 'provider_available_list'),
+
+    url(r'^providerinvoice/(?P<pk>[0-9]+)/pdf/', 'provider_invoice_pdf'),
 )
