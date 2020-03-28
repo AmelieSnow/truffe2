@@ -13,11 +13,6 @@ DJANGO_ROOT = dirname(abspath(__file__)) + '/../'
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
-)
-
-MANAGERS = ADMINS
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
@@ -171,11 +166,16 @@ LOGGING = {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
-        }
+        },
+        'file': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': '/var/log/truffe2/django.log'
+        },
     },
     'loggers': {
         'django.request': {
-            'handlers': ['mail_admins'],
+            'handlers': ['mail_admins', 'file'],
             'level': 'ERROR',
             'propagate': True,
         },
@@ -307,3 +307,9 @@ SECRET_KEY = cfg["SECRET_KEY"]
 
 BROKER_URL = cfg["BROKER_URL"]
 
+try: 
+    ADMINS = ( ('Admin', cfg["ADMIN_EMAIL"]) )
+except:
+    ADMINS = ()
+
+MANAGERS = ADMINS
