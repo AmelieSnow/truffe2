@@ -14,6 +14,7 @@ python-ldap
 pisa
 reportlab<3
 html5lib==1.0b8
+django-appconf<1.0.4
 django-jfu
 django-sendfile
 django-haystack==2.4.1
