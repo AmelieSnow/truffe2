@@ -3,8 +3,6 @@
 # Django settings for truffe2 project.
 
 from django.utils.translation import ugettext_lazy as _
-import os
-import yaml
 
 from os.path import abspath, dirname, join, normpath
 DJANGO_ROOT = dirname(abspath(__file__)) + '/../'
@@ -13,6 +11,11 @@ DJANGO_ROOT = dirname(abspath(__file__)) + '/../'
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
+ADMINS = (
+    # ('Your Name', 'your_email@example.com'),
+)
+
+MANAGERS = ADMINS
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
@@ -149,6 +152,7 @@ INSTALLED_APPS = (
     'vehicles',
 
     'generic',
+
 )
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
@@ -166,16 +170,11 @@ LOGGING = {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
-        },
-        'file': {
-            'level': 'ERROR',
-            'class': 'logging.FileHandler',
-            'filename': '/var/log/truffe2/django.log'
-        },
+        }
     },
     'loggers': {
         'django.request': {
-            'handlers': ['mail_admins', 'file'],
+            'handlers': ['mail_admins'],
             'level': 'ERROR',
             'propagate': True,
         },
@@ -275,41 +274,12 @@ WEBSITE_PATH = 'https://truffe2.agepoly.ch'
 
 EMAIL_FROM = 'truffe2@epfl.ch'
 
-app_config = os.environ.get("APP_CONFIG", dirname(abspath(__file__)) + "/../config.yaml")
-    
-with open(app_config, 'r') as stream:
+try:
+    from settingsLocal import *
+except ImportError:
+    raise
 
-    cfg = yaml.safe_load(stream)
-
-hosts = []  # type: List[str]
-
-hosts_from_env = os.environ.get("HOST", "")
-if hosts_from_env:
-    hosts = hosts_from_env.split(":")
-else:
-    hosts = cfg["ALLOWED_HOSTS"]
-
-if not hosts:
-    raise Exception("Could not deternime Application Host.")
-
-ACTIVATE_RAVEN = False
-
-DEBUG = cfg["DEBUG"]
-DATABASES = cfg["DATABASES"]
-
-ALLOWED_HOSTS = hosts
-
-EMAIL_HOST = cfg["EMAIL_HOST"]
-
-EMAIL_PORT = cfg["EMAIL_PORT"]
-
-SECRET_KEY = cfg["SECRET_KEY"]
-
-BROKER_URL = cfg["BROKER_URL"]
-
-try: 
-    ADMINS = ( ('Admin', cfg["ADMIN_EMAIL"]) )
-except:
-    ADMINS = ()
-
-MANAGERS = ADMINS
+if ACTIVATE_RAVEN:
+    INSTALLED_APPS = INSTALLED_APPS + (
+        'raven.contrib.django.raven_compat',
+    )
