@@ -959,12 +959,13 @@ class GenericAccountingStateModel(object):
 
     def rights_can_EDIT(self, user):
 
-        if self.status[0] in ['6','5', '4', '3']:
+        if self.status[0] in ['6']:
             return False
 
-        if self.status[0] in ['2'] and not self.rights_in_root_unit(user, 'TRESORERIE'):
+        if self.status[0] in ['5', '4', '3', '2'] and not self.rights_in_root_unit(user, 'TRESORERIE'):
             return False
-
+        #this is shitty temporary right for marianne (it is to be removed as soon as possible)
+        
         if self.status[0] in ['0', '1'] and not self.rights_in_linked_unit(user, 'TRESORERIE'):
             return False
 
