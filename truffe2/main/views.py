@@ -151,15 +151,16 @@ def home(request):
     BOXES = [
         # (lambda request: should_show, Function to call, template)
         (lambda request: True, _home_news, "news.html"),
-        (lambda request: True, lambda request: {}, "moderate.html"),
-        (lambda request: Accreditation.static_rights_can('VALIDATE', request.user), _home_accreds, "accreds_to_validate.html"),
-        (lambda request: request.user.rights_in_any_unit('TRESORERIE') or request.user.is_superuser, _home_invoices, "invoices.html"),
+        (lambda request: request.user.rights_in_any_unit(['TRESORERIE', 'SECRETARIAT']) or request.user.is_superuser, _home_expenseclaim, "expenseclaims.html"),
         (lambda request: request.user.rights_in_root_unit(request.user, ['TRESORERIE', 'SECRETARIAT']) or request.user.is_superuser, _home_internal_transferts, "internaltransfers.html"),
         (lambda request: request.user.rights_in_any_unit(['TRESORERIE', 'SECRETARIAT']) or request.user.is_superuser, _home_withdrawals, "withdrawals.html"),
-        (lambda request: request.user.rights_in_any_unit(['TRESORERIE', 'SECRETARIAT']) or request.user.is_superuser, _home_expenseclaim, "expenseclaims.html"),
         (lambda request: request.user.rights_in_any_unit(['TRESORERIE', 'SECRETARIAT']) or request.user.is_superuser, _home_cashbook, "cashbooks.html"),
+        (lambda request: request.user.rights_in_any_unit('TRESORERIE') or request.user.is_superuser, _home_invoices, "invoices.html"),
+        (lambda request: request.user.rights_in_any_unit(['TRESORERIE', 'SECRETARIAT']) or request.user.is_superuser, _home_providerInvoice, "providerInvoice.html"),
         (lambda request: request.user.rights_in_any_unit('TRESORERIE') or request.user.is_superuser, _home_accounting_lines, "accounting_lines.html"),
         (lambda request: request.user.rights_in_any_unit('TRESORERIE') or request.user.is_superuser, _home_accounting_errors, "accounting_errors.html"),
+        (lambda request: True, lambda request: {}, "moderate.html"),
+        (lambda request: Accreditation.static_rights_can('VALIDATE', request.user), _home_accreds, "accreds_to_validate.html"),
     ]
 
     data = {}
